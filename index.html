@@ -118,7 +118,10 @@
     ContactManager.Contact = Backbone.Model.extend({});
 
     ContactManager.ContactCollection = Backbone.Collection.extend({
-      model: ContactManager.Contact
+      model: ContactManager.Contact,
+      comparator: function(contact){
+        return contact.get("firstName") + " " + contact.get("lastName");
+      }
     });
 
     ContactManager.ContactItemView = Marionette.ItemView.extend({
@@ -139,9 +142,29 @@
           phoneNumber: "123"
         },
         {
+          firstName: "cathy",
+          lastName: "mcintosh",
+          phoneNumber: "098"
+        },
+        {
+          firstName: "jim",
+          lastName: "argues",
+          phoneNumber: "098"
+        },
+        {
+          firstName: "cathy",
+          lastName: "argues",
+          phoneNumber: "098"
+        },
+        {
           firstName: "noel",
           lastName: "javier",
           phoneNumber: "456"
+        },
+        {
+          firstName: "noel",
+          lastName: "candy",
+          phoneNumber: "765"
         },
         {
           firstName: "keith",
@@ -160,7 +183,5 @@
   ContactManager.start();
 
   </script>
-
-
   </body>
 </html>
