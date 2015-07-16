@@ -19,8 +19,14 @@
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.marionette/2.4.2/backbone.marionette.min.js"></script>
 
+<!--static model example-->
+<!--
     <script type="text/template" id="static-template">
       <p>This is the text that is rendered from Marionette App</p>
+    </script>
+
+    <script type="text/template" id="list-item-template">
+      <li>one item</li>
     </script>
 
     <script type="text/javascript">
@@ -35,7 +41,9 @@
       });
 
       ContactManager.StaticView = Marionette.ItemView.extend({
-        template: "#static-template"
+        // template: "#static-template"
+        template: "#list-item-template",
+        tagName: "ul"
       });
 
       ContactManager.on("start", function(){
@@ -44,7 +52,57 @@
       });
 
       ContactManager.start();
-
     </script>
+  -->
+
+  <!--display model example-->
+
+  <script type="text/template" id="contact-template">
+    <p><%- firstName %> <%- lastName %></p>  <!-- templating engine for Backbone is Underscore-->
+  </script>
+
+  <script type="text/javascript">
+    var ContactManager = new Marionette.Application();
+
+    ContactManager.addRegions({
+      mainRegion: "#main-region"
+    });
+
+    ContactManager.Contact = Backbone.Model.extend({
+      defaults: {
+        firstName: "",
+        phoneNumber: "No Phone Number!"
+      } //defaults, without these, the model will not display
+    }); //this will declare a model.
+
+    ContactManager.ContactView = Marionette.ItemView.extend({
+      template: "#contact-template",
+      events: {
+        "click p": "alertPhoneNumber"
+      },
+
+      alertPhoneNumber: function(){
+        alert(this.model.escape("phoneNumber"));
+      }
+    });
+
+    ContactManager.on("start", function(){
+      var cathy = new ContactManager.Contact({
+        // firstName: "cathy",
+        lastName: "lee",
+        // phoneNumber: "800-call-collect"
+      });
+
+      var cathyView = new ContactManager.ContactView({
+        model: cathy
+      });
+
+      ContactManager.mainRegion.show(cathyView);
+    });
+
+    ContactManager.start();
+
+  </script>
+
   </body>
 </html>
