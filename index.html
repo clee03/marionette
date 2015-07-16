@@ -53,14 +53,13 @@
 
       ContactManager.start();
     </script>
-  -->
+    -->
 
   <!--display model example-->
-
   <script type="text/template" id="contact-template">
-    <p><%- firstName %> <%- lastName %></p>  <!-- templating engine for Backbone is Underscore-->
+    <p><%- firstName %> <%- lastName %></p> <!--templating engine for Backbone is Underscore-->
   </script>
-
+  <!--
   <script type="text/javascript">
     var ContactManager = new Marionette.Application();
 
@@ -103,6 +102,65 @@
     ContactManager.start();
 
   </script>
+  -->
+  <!--CollectionView example -->
+  <script type="text/template" id="contact-list-item">
+    <%- firstName %> <%- lastName %>
+  </script>
+
+  <script type="text/javascript">
+    var ContactManager = new Marionette.Application();
+
+    ContactManager.addRegions({
+      mainRegion: "#main-region"
+    });
+
+    ContactManager.Contact = Backbone.Model.extend({});
+
+    ContactManager.ContactCollection = Backbone.Collection.extend({
+      model: ContactManager.Contact
+    });
+
+    ContactManager.ContactItemView = Marionette.ItemView.extend({
+      tagName: "li",
+      template: "#contact-list-item"
+    });
+
+    ContactManager.ContactsView = Marionette.CollectionView.extend ({
+      tagName: "ul",
+      childView: ContactManager.ContactItemView
+    });
+
+    ContactManager.on("start", function(){
+      var contacts = new ContactManager.ContactCollection([
+        {
+          firstName: "cathy",
+          lastName: "lee",
+          phoneNumber: "123"
+        },
+        {
+          firstName: "noel",
+          lastName: "javier",
+          phoneNumber: "456"
+        },
+        {
+          firstName: "keith",
+          lastName: "olson",
+          phoneNumber: "789"
+        }
+      ]);
+
+    var contactsListView = new ContactManager.ContactsView({
+      collection: contacts
+    });
+
+    ContactManager.mainRegion.show(contactsListView);
+  });
+
+  ContactManager.start();
+
+  </script>
+
 
   </body>
 </html>
